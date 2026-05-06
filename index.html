@@ -1,0 +1,1223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Coinstruct — Tokenization Advisory & Execution</title>
+<meta name="description" content="Coinstruct brings real-world assets on-chain with institutional rigor. Strategy, execution, and issuance for tokenized markets." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   COINSTRUCT — DARK-MODE DESIGN SYSTEM
+   ============================================================ */
+
+:root {
+  /* Dark-first backgrounds */
+  --bg:        #070d1a;
+  --surface:   #0d1828;
+  --surface-2: #111f33;
+  --surface-3: #192840;
+
+  /* Text */
+  --ink:   #eef2f9;
+  --ink-2: #8fa3c4;
+  --muted: #4e6484;
+
+  /* Borders */
+  --line:       rgba(148, 176, 220, 0.1);
+  --line-strong: rgba(148, 176, 220, 0.18);
+
+  /* Brand */
+  --blue:      #1c66ff;
+  --blue-glow: rgba(28, 102, 255, 0.3);
+  --cyan:      #34c5e8;
+  --cyan-glow: rgba(52, 197, 232, 0.25);
+  --positive:  #0aa66d;
+
+  --font-display: 'Inter Tight', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+
+  --container: 1240px;
+  --r-xl: 24px;
+  --r-lg: 18px;
+  --r-md: 12px;
+  --r-sm:  8px;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; }
+
+/* ── Layout ── */
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* ── Typography ── */
+.display-1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(44px, 7.2vw, 104px);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+.display-2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(34px, 5vw, 68px);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+}
+.display-3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(24px, 3vw, 42px);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+}
+.lead {
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--ink-2);
+}
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.eyebrow::before {
+  content: "";
+  width: 5px; height: 5px;
+  background: var(--cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--cyan);
+  flex-shrink: 0;
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 22px;
+  border-radius: var(--r-sm);
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  border: 1px solid transparent;
+  transition: transform 0.12s ease, background 0.15s, border-color 0.15s, box-shadow 0.15s, color 0.15s;
+  min-height: 48px;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+
+.btn-primary {
+  background: #fff;
+  color: #070d1a;
+  border-color: #fff;
+}
+.btn-primary:hover {
+  background: #ddeaff;
+  border-color: #ddeaff;
+  box-shadow: 0 0 0 4px rgba(255,255,255,0.08), 0 4px 20px rgba(28,102,255,0.25);
+}
+.btn-secondary {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line-strong);
+}
+.btn-secondary:hover {
+  border-color: rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.05);
+}
+.btn-blue {
+  background: var(--blue);
+  color: #fff;
+}
+.btn-blue:hover {
+  background: #2d74ff;
+  box-shadow: 0 0 0 4px var(--blue-glow), 0 4px 20px var(--blue-glow);
+}
+.btn .arr { transition: transform 0.15s; }
+.btn:hover .arr { transform: translateX(3px); }
+
+/* ── Navigation ── */
+nav.top {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(7, 13, 26, 0.8);
+  backdrop-filter: saturate(200%) blur(20px);
+  -webkit-backdrop-filter: saturate(200%) blur(20px);
+  border-bottom: 1px solid var(--line);
+}
+nav.top .row {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  height: 64px;
+}
+nav.top .logo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  flex-shrink: 0;
+}
+nav.top .links {
+  display: flex;
+  gap: 2px;
+  margin-left: 8px;
+}
+nav.top .links a {
+  font-size: 14px;
+  color: var(--ink-2);
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+  letter-spacing: -0.01em;
+}
+nav.top .links a:hover {
+  color: var(--ink);
+  background: rgba(255,255,255,0.06);
+}
+nav.top .spacer { flex: 1; }
+nav.top .login {
+  font-size: 14px;
+  color: var(--ink-2);
+  letter-spacing: -0.01em;
+  transition: color 0.15s;
+}
+nav.top .login:hover { color: var(--ink); }
+
+/* ── Hero ── */
+.hero {
+  position: relative;
+  padding: 140px 0 100px;
+  overflow: hidden;
+}
+.hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(80% 70% at 30% -5%, rgba(28,102,255,0.22) 0%, transparent 60%),
+    radial-gradient(50% 50% at 90% 50%, rgba(52,197,232,0.1) 0%, transparent 55%);
+  z-index: 0;
+  pointer-events: none;
+}
+.hero::after {
+  content: "";
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 75%);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 75%);
+  z-index: 0;
+  pointer-events: none;
+}
+.hero .container { position: relative; z-index: 1; }
+.hero-copy {
+  max-width: 860px;
+}
+.hero h1 { margin: 20px 0 30px; }
+.hero h1 .accent {
+  background: linear-gradient(120deg, var(--cyan) 0%, #4d8aff 55%, var(--blue) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero .lead {
+  font-size: 20px;
+  color: var(--ink-2);
+  max-width: 54ch;
+  line-height: 1.65;
+}
+.hero .cta-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 44px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.hero .trust {
+  margin-top: 100px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+}
+.hero .trust .label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+
+/* ── Marquee ── */
+.marquee {
+  position: relative;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+          mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 42s linear infinite;
+}
+.marquee:hover .marquee-track { animation-play-state: paused; }
+.marquee-group {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 56px;
+  padding-right: 56px;
+}
+.marquee-group .logo-mark {
+  display: flex;
+  align-items: center;
+  color: rgba(255,255,255,0.28);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+.marquee-group .logo-mark:hover { color: rgba(255,255,255,0.6); }
+.marquee-group .logo-mark .lm-dot {
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  margin-right: 8px;
+  background: currentColor;
+}
+.marquee-group .logo-mark .lm-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ── Stats bar ── */
+.stats-bar {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+.stats-bar .inner {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.stat-item {
+  padding: 52px 40px;
+  border-right: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+}
+.stat-item::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.stat-item:hover::before { opacity: 0.5; }
+.stat-item:last-child { border-right: none; }
+.stat-item .sv {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(42px, 5vw, 72px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+.stat-item .sv em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--cyan), var(--blue));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.stat-item .sk {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 10px;
+}
+
+/* ── Section base ── */
+section { padding: 140px 0; }
+
+.section-head {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 80px;
+  align-items: end;
+  margin-bottom: 64px;
+}
+.section-head .right { padding-bottom: 4px; }
+
+/* ── Areas of expertise ── */
+.areas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+}
+.area {
+  padding: 44px 36px 40px;
+  border-right: 1px solid var(--line);
+  background: var(--surface);
+  position: relative;
+  transition: background 0.25s;
+}
+.area:last-child { border-right: none; }
+.area:hover { background: var(--surface-2); }
+.area::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan) 50%, transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.area:hover::after { opacity: 1; }
+.area .num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin-bottom: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.area .icon {
+  width: 52px; height: 52px;
+  border-radius: 12px;
+  background: rgba(28,102,255,0.08);
+  border: 1px solid rgba(28,102,255,0.18);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 24px;
+  color: var(--cyan);
+}
+.area h3 {
+  font-family: var(--font-display);
+  font-size: 28px; line-height: 1.08; letter-spacing: -0.025em;
+  margin: 0 0 12px; font-weight: 600;
+  color: var(--ink);
+}
+.area p { color: var(--ink-2); margin: 0 0 24px; font-size: 15px; line-height: 1.7; }
+.area ul { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--line); }
+.area li {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+  color: var(--ink-2);
+  display: flex; align-items: center; gap: 10px;
+}
+.area li:last-child { border-bottom: none; }
+.area li::before {
+  content: "";
+  width: 4px; height: 4px;
+  background: var(--blue);
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px var(--blue-glow);
+}
+
+/* ── Cases ── */
+.cases-bg {
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.case-list {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+}
+.case {
+  display: grid;
+  grid-template-columns: 200px 1.5fr 1.5fr 56px;
+  gap: 32px;
+  padding: 28px 32px;
+  border-bottom: 1px solid var(--line);
+  align-items: center;
+  background: var(--surface);
+  transition: background 0.15s;
+}
+.case:last-child { border-bottom: none; }
+.case:hover { background: var(--surface-2); }
+.case .logo-cell {
+  height: 44px;
+  display: flex; align-items: center;
+  font-family: var(--font-display);
+  font-weight: 600; font-size: 16px;
+  letter-spacing: -0.01em;
+  color: var(--ink); gap: 10px;
+}
+.case .logo-cell .glyph {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--cyan); flex-shrink: 0;
+}
+.case .tag {
+  font-family: var(--font-mono);
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--cyan); margin-bottom: 6px;
+}
+.case .name {
+  font-family: var(--font-display);
+  font-size: 22px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1;
+  color: var(--ink);
+}
+.case .sector { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.case .summary { font-size: 14px; color: var(--ink-2); line-height: 1.65; }
+.case .arr {
+  justify-self: end;
+  width: 40px; height: 40px;
+  border: 1px solid var(--line-strong); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ink-2);
+  transition: all 0.15s;
+}
+.case:hover .arr {
+  background: var(--blue); color: #fff; border-color: transparent;
+  box-shadow: 0 0 20px var(--blue-glow);
+  transform: translateX(3px);
+}
+
+/* ── How we work ── */
+.how {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.phase {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: 52px 48px;
+  position: relative;
+  overflow: hidden;
+}
+.phase::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(52,197,232,0.5) 50%, transparent);
+}
+.phase.dark {
+  background: var(--surface-2);
+  border-color: rgba(28,102,255,0.15);
+}
+.phase.dark::before {
+  background: linear-gradient(90deg, transparent, rgba(28,102,255,0.7) 50%, transparent);
+}
+.phase .phase-num {
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 20px;
+}
+.phase.dark .phase-num { color: var(--cyan); }
+.phase h3 {
+  font-family: var(--font-display);
+  font-size: 52px; line-height: 0.96; letter-spacing: -0.04em;
+  margin: 0; font-weight: 700; color: var(--ink);
+}
+.phase .sub {
+  font-size: 17px; line-height: 1.55;
+  margin-top: 18px; color: var(--ink-2);
+}
+.phase .body-text {
+  margin-top: 22px; padding-top: 22px;
+  border-top: 1px solid var(--line);
+  font-size: 15px; line-height: 1.7; color: var(--ink-2);
+}
+.phase ul.streams {
+  list-style: none; padding: 0; margin: 28px 0 0;
+  border-top: 1px solid var(--line);
+}
+.phase ul.streams li {
+  padding: 15px 0;
+  border-bottom: 1px solid var(--line);
+  display: grid; grid-template-columns: 28px 1fr; gap: 12px;
+  align-items: start; font-size: 14px; color: var(--ink-2);
+}
+.phase ul.streams li:last-child { border-bottom: none; }
+.phase ul.streams li .n {
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--muted); padding-top: 2px;
+}
+.phase.dark ul.streams li .n { color: var(--cyan); }
+.phase .deliverable {
+  margin-top: 28px; padding: 18px;
+  border-radius: var(--r-md);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--line);
+  font-size: 14px; line-height: 1.65; color: var(--ink-2);
+  display: flex; gap: 14px;
+}
+.phase .deliverable .label {
+  font-family: var(--font-mono);
+  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--cyan); flex-shrink: 0; padding-top: 2px;
+}
+
+/* ── Footer CTA ── */
+.footer-cta {
+  background: #030710;
+  color: var(--ink);
+  padding: 160px 0 80px;
+  position: relative; overflow: hidden;
+}
+.footer-cta::before {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(65% 55% at 35% -5%, rgba(28,102,255,0.2) 0%, transparent 60%),
+    radial-gradient(45% 45% at 85% 35%, rgba(52,197,232,0.09) 0%, transparent 55%);
+  pointer-events: none;
+}
+.footer-cta::after {
+  content: "";
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 64px 64px;
+  pointer-events: none;
+}
+.footer-cta .grid {
+  display: grid; grid-template-columns: 1.4fr 1fr; gap: 80px;
+  align-items: end; position: relative; z-index: 1;
+}
+.footer-cta h2 {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 6.2vw, 92px);
+  line-height: 0.95; letter-spacing: -0.04em;
+  margin: 0; font-weight: 700; color: var(--ink);
+}
+.footer-cta h2 .light { color: rgba(143,163,196,0.6); }
+.footer-cta .meta {
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--cyan); margin-bottom: 22px;
+}
+.footer-cta p {
+  color: var(--ink-2); font-size: 17px; line-height: 1.7;
+  margin: 28px 0 0; max-width: 520px;
+}
+.footer-cta .contact {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--r-xl); padding: 28px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.footer-cta .contact .who {
+  font-family: var(--font-display); font-size: 20px;
+  font-weight: 600; letter-spacing: -0.02em; color: var(--ink);
+}
+.footer-cta .contact .role { color: var(--muted); font-size: 13px; margin-top: 4px; }
+.footer-cta .contact .linkedin-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 10px; padding: 5px 12px;
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 999px;
+  color: var(--ink-2); background: rgba(255,255,255,0.04);
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em;
+  min-height: 34px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.footer-cta .contact .linkedin-link:hover { color: var(--ink); border-color: var(--cyan); }
+.footer-cta .contact .contact-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.footer-cta .contact .avatar {
+  width: 112px; height: 112px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0;
+  background: linear-gradient(135deg, #0d1828, #111f33 50%, #0a2a72);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 38px; letter-spacing: -0.02em; color: #fff;
+}
+.footer-cta .contact .email {
+  margin-top: 22px; font-family: var(--font-mono); color: var(--cyan); font-size: 14px;
+}
+.footer-cta .contact .btn { width: 100%; justify-content: center; margin-top: 20px; }
+
+/* ── Footer bar ── */
+.footer-bar {
+  background: #030710;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 24px 0;
+}
+.footer-bar .row {
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: #2f4462;
+}
+
+
+/* ================================================================
+   RESPONSIVE — TABLET (≤ 980px)
+   ================================================================ */
+@media (max-width: 980px) {
+  .container { padding: 0 28px; }
+
+  .section-head,
+  .how,
+  .footer-cta .grid { grid-template-columns: 1fr; gap: 40px; }
+
+  .areas { grid-template-columns: 1fr; border-radius: var(--r-lg); }
+  .area { border-right: none; border-bottom: 1px solid var(--line); }
+  .area:last-child { border-bottom: none; }
+
+  .case { grid-template-columns: 160px 1fr; }
+  .case .summary, .case .arr { grid-column: 1 / -1; }
+  .case-list { border-radius: var(--r-lg); }
+
+  nav.top .links { display: none; }
+  nav.top .login { display: none; }
+
+  .hero { padding: 96px 0 72px; }
+  section { padding: 96px 0; }
+
+  .stats-bar .inner { grid-template-columns: repeat(2, 1fr); }
+  .stat-item:nth-child(2) { border-right: none; }
+  .stat-item:nth-child(3) { border-top: 1px solid var(--line); }
+  .stat-item:nth-child(4) { border-top: 1px solid var(--line); border-right: none; }
+}
+
+
+/* ================================================================
+   RESPONSIVE — MOBILE (≤ 640px)
+   ================================================================ */
+@media (max-width: 640px) {
+  html, body { overflow-x: hidden; }
+  .container { padding: 0 20px; max-width: 100%; }
+
+  .display-1 {
+    font-size: clamp(34px, 9vw, 46px);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    word-break: break-word;
+  }
+  .display-2 { font-size: clamp(26px, 8vw, 36px); line-height: 1.05; }
+  .display-3 { font-size: clamp(20px, 6vw, 28px); }
+  .lead { font-size: 16px; }
+
+  nav.top .row { height: 56px; gap: 10px; }
+  nav.top .logo { font-size: 17px; gap: 7px; }
+  nav.top .logo svg { height: 22px !important; width: auto !important; }
+  nav.top .btn-primary { padding: 8px 14px; font-size: 13px; min-height: 38px; }
+
+  .hero { padding: 64px 0 56px; }
+  .hero .cta-row {
+    flex-direction: column; align-items: stretch; gap: 10px; margin-top: 32px;
+  }
+  .hero .cta-row .btn { width: 100%; justify-content: center; min-height: 52px; }
+  .hero .trust { margin-top: 60px; }
+
+  .marquee-group { gap: 32px; padding-right: 32px; }
+  .marquee-group .logo-mark { font-size: 13px; }
+  .marquee-track { animation-duration: 28s; }
+
+  section { padding: 72px 0; }
+  .section-head { gap: 16px; margin-bottom: 36px; }
+
+  .stats-bar .inner { grid-template-columns: repeat(2, 1fr); }
+  .stat-item { padding: 36px 24px; }
+  .stat-item:nth-child(2) { border-right: none; }
+  .stat-item:nth-child(3) { border-top: 1px solid var(--line); }
+  .stat-item:nth-child(4) { border-top: 1px solid var(--line); border-right: none; }
+
+  .areas { border-radius: var(--r-lg); }
+  .area { padding: 28px 24px; }
+  .area h3 { font-size: 23px; }
+
+  .case { grid-template-columns: 1fr; gap: 10px; padding: 24px 20px; }
+  .case .logo-cell { height: auto; }
+  .case .name { font-size: 20px; }
+  .case .arr { justify-self: start; width: 38px; height: 38px; }
+  .case-list { border-radius: var(--r-lg); }
+
+  .how { gap: 12px; }
+  .phase { padding: 32px 26px; border-radius: var(--r-lg); }
+  .phase h3 { font-size: 38px; }
+  .phase .sub { font-size: 16px; }
+  .phase .deliverable { flex-direction: column; gap: 6px; }
+
+  .footer-cta { padding: 88px 0 60px; }
+  .footer-cta h2 { font-size: clamp(34px, 10vw, 52px); letter-spacing: -0.03em; }
+  .footer-cta p { font-size: 16px; }
+  .footer-cta .grid { gap: 52px; }
+  .footer-cta .contact { padding: 22px 20px; border-radius: var(--r-lg); }
+  .footer-cta .contact .contact-head { flex-wrap: wrap; }
+  .footer-cta .contact .avatar { width: 76px; height: 76px; font-size: 28px; }
+  .footer-cta .contact .who { font-size: 18px; }
+  .footer-cta .contact .email { font-size: 13px; word-break: break-all; }
+
+  .footer-bar { padding: 18px 0; }
+  .footer-bar .row { flex-direction: column; align-items: flex-start; gap: 6px; font-size: 10px; }
+}
+
+
+/* ================================================================
+   RESPONSIVE — VERY SMALL (≤ 375px)
+   ================================================================ */
+@media (max-width: 375px) {
+  .container { padding: 0 16px; }
+  .display-1 { font-size: clamp(28px, 8.5vw, 34px); }
+  .display-2 { font-size: clamp(24px, 8vw, 30px); }
+  nav.top .logo { font-size: 15px; }
+  nav.top .btn-primary { padding: 7px 11px; font-size: 12px; }
+  .footer-cta h2 { font-size: clamp(28px, 9.5vw, 36px); }
+  .footer-cta .contact .contact-head { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .footer-cta .contact .avatar { width: 60px; height: 60px; font-size: 22px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ================== NAV ================== -->
+<nav class="top">
+  <div class="container row">
+    <a href="#" class="logo" aria-label="Coinstruct home">
+      <svg width="26" height="26" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <circle cx="14" cy="14" r="12.5" stroke="#34c5e8" stroke-width="1.6"/>
+        <path d="M5 14 L23 14 M14 5 L14 23" stroke="#1c66ff" stroke-width="1.6" stroke-linecap="round"/>
+        <circle cx="14" cy="14" r="3.2" fill="#1c66ff"/>
+      </svg>
+      <span>Coinstruct</span>
+    </a>
+    <div class="links">
+      <a href="#expertise">Expertise</a>
+      <a href="#cases">Cases</a>
+      <a href="#approach">Approach</a>
+      <a href="#insights">Insights</a>
+    </div>
+    <div class="spacer"></div>
+    <a href="#" class="login">Log in</a>
+    <a href="#contact" class="btn btn-primary">
+      Book intro call
+      <svg class="arr" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</nav>
+
+
+<!-- ================== HERO ================== -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-copy">
+      <div class="eyebrow">// Tokenization Advisory &amp; Execution</div>
+      <h1 class="display-1">
+        Bring real-world assets <span class="accent">on-chain</span>,<br>
+        with institutional rigor.
+      </h1>
+      <p class="lead">
+        Coinstruct partners with funds, banks, and issuers to design, build, and launch tokenized financial products — from regulatory strategy through smart-contract execution and primary issuance.
+      </p>
+      <div class="cta-row">
+        <a href="#contact" class="btn btn-primary">
+          Book intro call
+          <svg class="arr" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#cases" class="btn btn-secondary">
+          See our work
+          <svg class="arr" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="trust">
+      <div class="label">Trusted by funds, banks, and issuers across Europe and APAC</div>
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee-track">
+          <div class="marquee-group">
+            <div class="logo-mark"><span class="lm-dot"></span>NORDIC&nbsp;CAPITAL</div>
+            <div class="logo-mark">MERIDIAN&nbsp;BANK</div>
+            <div class="logo-mark"><span class="lm-tag">[ Axis Ledger ]</span></div>
+            <div class="logo-mark">HELVETICA</div>
+            <div class="logo-mark">▲ KASTRA</div>
+            <div class="logo-mark">SOLERA&nbsp;WEALTH</div>
+            <div class="logo-mark">◇ northwind</div>
+            <div class="logo-mark"><span class="lm-tag">Crestmark / TR</span></div>
+            <div class="logo-mark">VARDA&nbsp;ASSET&nbsp;MGMT</div>
+            <div class="logo-mark">— PARALLAX</div>
+          </div>
+          <div class="marquee-group" aria-hidden="true">
+            <div class="logo-mark"><span class="lm-dot"></span>NORDIC&nbsp;CAPITAL</div>
+            <div class="logo-mark">MERIDIAN&nbsp;BANK</div>
+            <div class="logo-mark"><span class="lm-tag">[ Axis Ledger ]</span></div>
+            <div class="logo-mark">HELVETICA</div>
+            <div class="logo-mark">▲ KASTRA</div>
+            <div class="logo-mark">SOLERA&nbsp;WEALTH</div>
+            <div class="logo-mark">◇ northwind</div>
+            <div class="logo-mark"><span class="lm-tag">Crestmark / TR</span></div>
+            <div class="logo-mark">VARDA&nbsp;ASSET&nbsp;MGMT</div>
+            <div class="logo-mark">— PARALLAX</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================== STATS BAR ================== -->
+<div class="stats-bar">
+  <div class="container">
+    <div class="inner">
+      <div class="stat-item">
+        <div class="sv">$2.4<em>B+</em></div>
+        <div class="sk">Assets tokenized</div>
+      </div>
+      <div class="stat-item">
+        <div class="sv">T<em>+0</em></div>
+        <div class="sk">Settlement speed</div>
+      </div>
+      <div class="stat-item">
+        <div class="sv">40<em>+</em></div>
+        <div class="sk">Mandates closed</div>
+      </div>
+      <div class="stat-item">
+        <div class="sv">12</div>
+        <div class="sk">Jurisdictions covered</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ================== AREAS OF EXPERTISE ================== -->
+<section id="expertise">
+  <div class="container">
+    <div class="section-head">
+      <div class="left">
+        <div class="eyebrow">// Areas of expertise</div>
+        <h2 class="display-2" style="margin: 20px 0 0;">Three disciplines.<br/>One mandate.</h2>
+      </div>
+      <div class="right">
+        <p class="lead">We meet you wherever you are on the curve — from a board-level "should we tokenize?" memo, to mainnet issuance, to ongoing lifecycle operations.</p>
+      </div>
+    </div>
+
+    <div class="areas">
+      <div class="area">
+        <div class="num"><span>01 / Strategy</span><span>—</span></div>
+        <div class="icon" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+            <path d="M5 22 L11 14 L15 18 L23 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M17 6 L23 6 L23 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>Strategy &amp; structuring</h3>
+        <p>From thesis to investment committee. We translate your asset class, jurisdiction, and distribution model into a tokenization roadmap that holds up under legal and commercial scrutiny.</p>
+        <ul>
+          <li>Market entry &amp; opportunity sizing</li>
+          <li>Token economic &amp; structural design</li>
+          <li>Regulatory positioning (EU, CH, SG, AE)</li>
+          <li>Vendor &amp; chain selection</li>
+        </ul>
+      </div>
+
+      <div class="area">
+        <div class="num"><span>02 / Execution</span><span>—</span></div>
+        <div class="icon" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+            <rect x="4" y="6" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M9 12 L12 15 L9 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15 18 L19 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>Execution &amp; engineering</h3>
+        <p>A senior delivery team with audited smart-contract patterns, custody integrations, and operational runbooks. We build, you ship — without owning the engineering risk in-house.</p>
+        <ul>
+          <li>Smart-contract architecture &amp; audits</li>
+          <li>Custody, KYT &amp; transfer agent integration</li>
+          <li>Distribution rails &amp; investor onboarding</li>
+          <li>Off-chain ⇄ on-chain reconciliation</li>
+        </ul>
+      </div>
+
+      <div class="area">
+        <div class="num"><span>03 / Issuance</span><span>—</span></div>
+        <div class="icon" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+            <circle cx="14" cy="14" r="9" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M14 8 L14 14 L18 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="14" cy="14" r="1.6" fill="currentColor"/>
+          </svg>
+        </div>
+        <h3>Issuance &amp; lifecycle</h3>
+        <p>Primary issuance, secondary liquidity, corporate actions, and reporting — orchestrated as a single operating system rather than ten disconnected vendors.</p>
+        <ul>
+          <li>Primary &amp; secondary issuance ops</li>
+          <li>Coupon, redemption &amp; corporate actions</li>
+          <li>Investor reporting &amp; NAV pipelines</li>
+          <li>Liquidity venue &amp; market-maker setup</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================== SELECTED CASES ================== -->
+<section id="cases" class="cases-bg">
+  <div class="container">
+    <div class="section-head">
+      <div class="left">
+        <div class="eyebrow">// Selected cases</div>
+        <h2 class="display-2" style="margin: 20px 0 0;">What we've shipped.</h2>
+      </div>
+      <div class="right">
+        <p class="lead">A selection of recent mandates — full case studies under NDA. Reach out if a sector or structure looks adjacent to yours.</p>
+      </div>
+    </div>
+
+    <div class="case-list">
+      <a href="#" class="case">
+        <div class="logo-cell">
+          <span class="glyph">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M3 17 L3 9 L10 4 L17 9 L17 17 Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+              <path d="M8 17 L8 12 L12 12 L12 17" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          Helvetica Capital
+        </div>
+        <div>
+          <div class="tag">Real Estate · CH</div>
+          <div class="name">€240M property fund</div>
+          <div class="sector">Tokenized on Polygon · 2025</div>
+        </div>
+        <div class="summary">Replaced a paper-based feeder structure with a permissioned ERC-3643 token, opening monthly subscriptions to qualified investors across six EU jurisdictions.</div>
+        <div class="arr" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </a>
+
+      <a href="#" class="case">
+        <div class="logo-cell">
+          <span class="glyph">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M10 3 L10 17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M5 7 Q10 3 15 7 Q10 11 5 7 Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+              <path d="M5 13 Q10 9 15 13 Q10 17 5 13 Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          Northwind Energy
+        </div>
+        <div>
+          <div class="tag">Climate · DE</div>
+          <div class="name">Carbon credit issuance</div>
+          <div class="sector">On-chain registry · 2024–2025</div>
+        </div>
+        <div class="summary">Designed and deployed a verified-credit issuance pipeline with on-chain retirement, replacing manual spreadsheets across three project developers.</div>
+        <div class="arr" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </a>
+
+      <a href="#" class="case">
+        <div class="logo-cell">
+          <span class="glyph">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <rect x="3" y="6" width="14" height="10" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M3 10 L17 10" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M7 14 L11 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </span>
+          Solera Wealth
+        </div>
+        <div>
+          <div class="tag">Fixed Income · LU</div>
+          <div class="name">Tokenized private credit</div>
+          <div class="sector">DLT pilot regime · 2025</div>
+        </div>
+        <div class="summary">Stood up a primary issuance platform for a private bank's wealth clients, integrating custody, KYC, and a regulated secondary venue under the EU DLT pilot.</div>
+        <div class="arr" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </a>
+
+      <a href="#" class="case">
+        <div class="logo-cell">
+          <span class="glyph">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M10 5 L10 10 L13 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          Kastra Treasury
+        </div>
+        <div>
+          <div class="tag">Money Markets · SG</div>
+          <div class="name">Tokenized T-bill fund</div>
+          <div class="sector">24/7 redemption rails · 2025</div>
+        </div>
+        <div class="summary">Launched a daily-NAV money market token for treasury clients with intraday subscription and redemption, settled atomically against tokenized cash.</div>
+        <div class="arr" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================== HOW WE WORK ================== -->
+<section id="approach">
+  <div class="container">
+    <div class="section-head">
+      <div class="left">
+        <div class="eyebrow">// How we work</div>
+        <h2 class="display-2" style="margin: 20px 0 0;">Two phases.<br/>Senior bench throughout.</h2>
+      </div>
+      <div class="right">
+        <p class="lead">Most engagements run 4–9 months from kickoff to first investor allocation. No throwaway slides — every deliverable feeds the build.</p>
+      </div>
+    </div>
+
+    <div class="how">
+      <div class="phase">
+        <div class="phase-num">Phase 01 · 4–8 weeks</div>
+        <h3>Discovery &amp; Strategy</h3>
+        <div class="sub">A diagnostic sprint that converts intent into an executable, board-ready plan.</div>
+        <div class="body-text">We pressure-test the commercial thesis, the regulatory path, and the operating model before a single line of code is written. You leave with conviction — or a clear "not yet."</div>
+        <ul class="streams">
+          <li><span class="n">A.</span><span><strong>Diagnostic</strong> — current state, gaps, stakeholder map.</span></li>
+          <li><span class="n">B.</span><span><strong>Market mapping</strong> — comparable issuances, distribution channels, pricing.</span></li>
+          <li><span class="n">C.</span><span><strong>Token design</strong> — structure, rights, lifecycle events, transfer rules.</span></li>
+          <li><span class="n">D.</span><span><strong>Regulatory</strong> — jurisdictional fit, license inventory, counsel coordination.</span></li>
+        </ul>
+        <div class="deliverable">
+          <span class="label">Deliverable</span>
+          <span>Investment-committee memo · token term sheet · execution roadmap with vendor &amp; budget envelope.</span>
+        </div>
+      </div>
+
+      <div class="phase dark">
+        <div class="phase-num">Phase 02 · 12–32 weeks</div>
+        <h3>Execution &amp; Launch</h3>
+        <div class="sub">A senior delivery squad embedded with your team until the first investor settles on-chain.</div>
+        <div class="body-text">We run engineering, integrations, legal handoffs, and go-to-market in parallel — with weekly steering, transparent burn, and clear off-ramps at every gate.</div>
+        <ul class="streams">
+          <li><span class="n">A.</span><span><strong>Build</strong> — smart contracts, audits, infra, observability.</span></li>
+          <li><span class="n">B.</span><span><strong>Integration</strong> — custody, KYT, transfer agent, banking rails.</span></li>
+          <li><span class="n">C.</span><span><strong>Issuance</strong> — primary launch, allocation, settlement, reporting.</span></li>
+          <li><span class="n">D.</span><span><strong>Lifecycle</strong> — corporate actions, secondary venues, ongoing ops.</span></li>
+        </ul>
+        <div class="deliverable">
+          <span class="label">Deliverable</span>
+          <span>Live tokenized product on mainnet · audited contracts · investor portal · operational runbook handed to your team.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================== FOOTER CTA ================== -->
+<section id="contact" class="footer-cta">
+  <div class="container">
+    <div class="grid">
+      <div>
+        <div class="meta">// Start a conversation</div>
+        <h2>
+          Ready to put real assets <span class="light">on the rails of tomorrow?</span>
+        </h2>
+        <p>Tell us about the asset class, the jurisdiction, and the timeline. We'll come back within two business days with an honest read on fit, scope, and a sensible first step.</p>
+      </div>
+
+      <div class="contact">
+        <div class="contact-head">
+          <div>
+            <div class="who">Maxim Krasnov</div>
+            <div class="role">Managing Partner, Coinstruct</div>
+            <a href="https://www.linkedin.com/" target="_blank" rel="noopener" class="linkedin-link">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+              <span>LinkedIn</span>
+            </a>
+          </div>
+          <div class="avatar" aria-hidden="true">MK</div>
+        </div>
+        <div class="email">maxim@coinstruct.io</div>
+        <a href="mailto:maxim@coinstruct.io" class="btn btn-blue">
+          Book intro call
+          <svg class="arr" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================== FOOTER BAR ================== -->
+<footer class="footer-bar">
+  <div class="container row">
+    <div>© 2026 Coinstruct AG · Zurich</div>
+    <div>Built with discretion</div>
+  </div>
+</footer>
+
+</body>
+</html>
