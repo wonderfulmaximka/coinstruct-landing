@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -7,11 +7,11 @@ const supabase = createClient(
 )
 
 export async function GET(
-  request: Request,
-  { params }: { params: { slug: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = params
+    const { slug } = await params
 
     const { data, error } = await supabase
       .from('articles')
