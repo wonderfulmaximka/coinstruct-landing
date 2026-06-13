@@ -1,14 +1,23 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+// Build a Supabase client that carries the user's JWT so RLS sees them as authenticated
+function makeClient(token: string) {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { global: { headers: { Authorization: `Bearer ${token}` } } }
+  )
+}
 
-async function verifyAdminAuth(token?: string) {
+async function verifyAuth(token?: string) {
   if (!token) return null
   try {
+    // Use a plain client just for token verification
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
     const { data, error } = await supabase.auth.getUser(token)
     if (error || !data.user) return null
     return data.user
@@ -22,14 +31,12 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const authHeader = request.headers.get('authorization')
-    const token = authHeader?.replace('Bearer ', '')
-    const user = await verifyAdminAuth(token)
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    const token = request.headers.get('authorization')?.replace('Bearer ', '')
+    const user = await verifyAuth(token)
+    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     const { id } = await params
+    const supabase = makeClient(token!)
 
     const { data, error } = await supabase
       .from('articles')
@@ -40,7 +47,6 @@ export async function GET(
     if (error || !data) {
       return NextResponse.json({ error: 'Article not found' }, { status: 404 })
     }
-
     return NextResponse.json(data)
   } catch (err) {
     console.error('Article fetch error:', err)
@@ -53,36 +59,24 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const authHeader = request.headers.get('authorization')
-    const token = authHeader?.replace('Bearer ', '')
-    const user = await verifyAdminAuth(token)
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    const token = request.headers.get('authorization')?.replace('Bearer ', '')
+    const user = await verifyAuth(token)
+    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     const { id } = await params
+    const supabase = makeClient(token!)
+
     const body = await request.json()
     const {
-      title,
-      slug,
-      subtitle,
-      content,
-      excerpt,
-      thumbnail_url,
-      meta_description,
-      og_image_url,
-      schema_markup,
-      status,
+      title, slug, subtitle, content, excerpt,
+      thumbnail_url, meta_description, og_image_url, schema_markup, status,
     } = body
 
     if (!title || !slug) {
-      return NextResponse.json(
-        { error: 'Title and slug are required' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Title and slug are required' }, { status: 400 })
     }
 
-    // Fetch current article to preserve published_at when re-publishing
+    // Fetch current to preserve published_at when re-publishing
     const { data: current } = await supabase
       .from('articles')
       .select('status, published_at')
@@ -103,11 +97,9 @@ export async function PUT(
       updated_at: new Date().toISOString(),
     }
 
-    // Set published_at when first publishing; clear it when unpublishing
     if (status === 'published' && !current?.published_at) {
       updateData.published_at = new Date().toISOString()
     } else if (status === 'published' && current?.published_at) {
-      // Keep existing published_at
       updateData.published_at = current.published_at
     } else {
       updateData.published_at = null
@@ -120,9 +112,9 @@ export async function PUT(
       .select()
 
     if (error) {
+      console.error('Article update error:', error)
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
-
     return NextResponse.json(data?.[0])
   } catch (err) {
     console.error('Article update error:', err)
@@ -135,21 +127,18 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const authHeader = request.headers.get('authorization')
-    const token = authHeader?.replace('Bearer ', '')
-    const user = await verifyAdminAuth(token)
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    const token = request.headers.get('authorization')?.replace('Bearer ', '')
+    const user = await verifyAuth(token)
+    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     const { id } = await params
+    const supabase = makeClient(token!)
 
     const { error } = await supabase.from('articles').delete().eq('id', id)
-
     if (error) {
+      console.error('Article delete error:', error)
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
-
     return NextResponse.json({ success: true })
   } catch (err) {
     console.error('Article delete error:', err)
