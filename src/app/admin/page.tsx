@@ -169,9 +169,23 @@ export default function AdminDashboard() {
                       )}
 
                       <button
-                        onClick={() => {
-                          if (confirm('Delete this article?')) {
-                            // Delete implementation comes in Phase 5
+                        onClick={async () => {
+                          if (!confirm('Delete this article? This cannot be undone.')) return
+                          try {
+                            const res = await fetch(`/api/admin/articles/${article.id}`, {
+                              method: 'DELETE',
+                              headers: {
+                                Authorization: `Bearer ${localStorage.getItem('admin_token')}`,
+                              },
+                            })
+                            if (res.ok) {
+                              setArticles((prev) => prev.filter((a) => a.id !== article.id))
+                            } else {
+                              const d = await res.json()
+                              alert(d.error || 'Delete failed')
+                            }
+                          } catch {
+                            alert('Delete failed')
                           }
                         }}
                         className="text-red-600 hover:text-red-700 text-sm font-medium"

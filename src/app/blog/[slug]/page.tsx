@@ -2,38 +2,66 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useParams } from 'next/navigation'
+import { generateHTML } from '@tiptap/core'
+import StarterKit from '@tiptap/starter-kit'
+import Underline from '@tiptap/extension-underline'
+import LinkExtension from '@tiptap/extension-link'
+import Image from '@tiptap/extension-image'
+import Youtube from '@tiptap/extension-youtube'
 import { Article } from '@/lib/types'
 
-export default function ArticlePage({ params }: { params: { slug: string } }) {
+const EXTENSIONS = [StarterKit, Underline, LinkExtension, Image, Youtube]
+
+function ArticleContent({ content }: { content: any }) {
+  if (!content) return null
+
+  try {
+    const html = generateHTML(content, EXTENSIONS)
+    return (
+      <div
+        className="tiptap-editor"
+        // Content comes from our own database — not user-supplied untrusted HTML
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
+    )
+  } catch {
+    return <p className="text-gray-500 italic">Content could not be rendered.</p>
+  }
+}
+
+export default function ArticlePage() {
+  const params = useParams()
+  const slug = params.slug as string
+
   const [article, setArticle] = useState<Article | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    if (!slug) return
     const fetchArticle = async () => {
       try {
-        const res = await fetch(`/api/articles/${params.slug}`)
+        const res = await fetch(`/api/articles/${slug}`)
         if (!res.ok) {
           setError('Article not found')
           return
         }
         const data = await res.json()
         setArticle(data)
-      } catch (err) {
-        console.error('Failed to fetch article:', err)
+      } catch {
         setError('Failed to load article')
       } finally {
         setLoading(false)
       }
     }
-
     fetchArticle()
-  }, [params.slug])
+  }, [slug])
 
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <p className="text-gray-500">Loading...</p>
+        <p className="text-gray-400 text-sm">Loading…</p>
       </div>
     )
   }
@@ -42,8 +70,8 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
     return (
       <div className="min-h-screen bg-white">
         <div className="mx-auto max-w-2xl px-6 py-12">
-          <h1 className="text-2xl font-bold text-gray-900">{error}</h1>
-          <Link href="/blog" className="mt-4 text-blue-600 hover:text-blue-700">
+          <h1 className="text-2xl font-bold text-gray-900">{error || 'Not found'}</h1>
+          <Link href="/blog" className="mt-4 inline-block text-blue-600 hover:underline text-sm">
             ← Back to blog
           </Link>
         </div>
@@ -53,54 +81,54 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Image */}
+      {/* Thumbnail hero */}
       {article.thumbnail_url && (
-        <div className="relative aspect-video w-full overflow-hidden bg-gray-200">
+        <div className="w-full aspect-video overflow-hidden bg-gray-100">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={article.thumbnail_url}
             alt={article.title}
-            className="h-full w-full object-cover"
+            className="w-full h-full object-cover"
           />
         </div>
       )}
 
-      {/* Article Content */}
       <article className="mx-auto max-w-2xl px-6 py-12">
-        {/* Header */}
-        <div className="border-b border-gray-200 pb-8">
-          {/* Back link */}
-          <Link href="/blog" className="text-sm text-blue-600 hover:text-blue-700">
-            ← Back to blog
-          </Link>
+        {/* Back link */}
+        <Link href="/blog" className="text-sm text-blue-600 hover:underline">
+          ← Back to blog
+        </Link>
 
-          {/* Date */}
-          {article.published_at && (
-            <p className="mt-4 text-sm text-gray-500">
-              {new Date(article.published_at).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
-            </p>
-          )}
+        {/* Meta */}
+        {article.published_at && (
+          <p className="mt-6 text-sm text-gray-400">
+            {new Date(article.published_at).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </p>
+        )}
 
-          {/* Title */}
-          <h1 className="mt-2 text-4xl font-bold text-gray-900">
-            {article.title}
-          </h1>
+        {/* Title */}
+        <h1 className="mt-3 text-4xl font-bold text-gray-900 leading-tight tracking-tight">
+          {article.title}
+        </h1>
 
-          {/* Subtitle */}
-          {article.subtitle && (
-            <p className="mt-4 text-xl text-gray-600">{article.subtitle}</p>
-          )}
-        </div>
+        {/* Subtitle */}
+        {article.subtitle && (
+          <p className="mt-4 text-xl text-gray-500 leading-relaxed">{article.subtitle}</p>
+        )}
 
-        {/* Content */}
-        <div className="prose prose-sm max-w-none py-8">
+        {/* Divider */}
+        <hr className="mt-8 border-gray-100" />
+
+        {/* Body */}
+        <div className="py-8">
           <ArticleContent content={article.content} />
         </div>
 
-        {/* SEO Metadata (hidden from view, for search engines) */}
+        {/* JSON-LD schema */}
         {article.schema_markup && (
           <script
             type="application/ld+json"
@@ -108,23 +136,6 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
           />
         )}
       </article>
-    </div>
-  )
-}
-
-function ArticleContent({ content }: { content: any }) {
-  if (!content) return null
-
-  // TipTap JSON renderer
-  // This is a simplified version - in production, use @tiptap/react with nodeViewsRenderer
-  return (
-    <div className="space-y-4">
-      <pre className="rounded bg-gray-100 p-4 text-xs overflow-auto">
-        {JSON.stringify(content, null, 2)}
-      </pre>
-      <p className="text-gray-600 text-sm">
-        ℹ️ Full TipTap content rendering will be implemented in the admin panel
-      </p>
     </div>
   )
 }
