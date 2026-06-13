@@ -81,18 +81,6 @@ export default function ArticlePage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Thumbnail hero */}
-      {article.thumbnail_url && (
-        <div className="w-full aspect-video overflow-hidden bg-gray-100">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={article.thumbnail_url}
-            alt={article.title}
-            className="w-full h-full object-cover"
-          />
-        </div>
-      )}
-
       <article className="mx-auto max-w-2xl px-6 py-12">
         {/* Back link */}
         <Link href="/blog" className="text-sm text-blue-600 hover:underline">
@@ -101,7 +89,7 @@ export default function ArticlePage() {
 
         {/* Meta */}
         {article.published_at && (
-          <p className="mt-6 text-sm text-gray-400">
+          <p className="mt-6 text-sm text-gray-400 uppercase tracking-wide">
             {new Date(article.published_at).toLocaleDateString('en-US', {
               year: 'numeric',
               month: 'long',
@@ -117,7 +105,19 @@ export default function ArticlePage() {
 
         {/* Subtitle */}
         {article.subtitle && (
-          <p className="mt-4 text-xl text-gray-500 leading-relaxed">{article.subtitle}</p>
+          <p className="mt-4 text-lg text-gray-500 leading-relaxed">{article.subtitle}</p>
+        )}
+
+        {/* Thumbnail — sits inline below the header, above the body */}
+        {article.thumbnail_url && (
+          <div className="mt-8 overflow-hidden rounded-xl bg-gray-100">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={article.thumbnail_url}
+              alt={article.title}
+              className="w-full h-auto max-h-96 object-cover"
+            />
+          </div>
         )}
 
         {/* Divider */}
