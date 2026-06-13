@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { storeSession } from '@/lib/auth'
 
 export default function AdminLoginPage() {
   const router = useRouter()
@@ -28,6 +29,12 @@ export default function AdminLoginPage() {
         setError(data.error || 'Login failed')
         return
       }
+
+      // Store session in localStorage so the admin layout can read it
+      storeSession({
+        access_token: data.token,
+        user: { id: data.user.id, email: data.user.email },
+      })
 
       // Redirect to admin dashboard
       router.push('/admin')
