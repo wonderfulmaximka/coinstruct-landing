@@ -7,6 +7,7 @@ import Image from '@tiptap/extension-image'
 import Youtube from '@tiptap/extension-youtube'
 import Underline from '@tiptap/extension-underline'
 import { useCallback, useRef } from 'react'
+import { CtaButton } from '@/lib/cta-button-extension'
 
 interface EditorProps {
   content: any
@@ -55,6 +56,7 @@ export default function Editor({ content, onChange }: EditorProps) {
       }),
       Image.configure({ inline: false, allowBase64: false }),
       Youtube.configure({ width: 640, height: 360 }),
+      CtaButton,
     ],
     content: content || '',
     immediatelyRender: false,
@@ -114,6 +116,20 @@ export default function Editor({ content, onChange }: EditorProps) {
     if (!editor) return
     const url = window.prompt('Paste YouTube URL:')
     if (url) editor.chain().focus().setYoutubeVideo({ src: url }).run()
+  }, [editor])
+
+  const handleCta = useCallback(() => {
+    if (!editor) return
+    const text = window.prompt('Button text:', 'Talk to Expert')
+    if (!text) return
+    const href = window.prompt(
+      'Button URL:',
+      'https://calendly.com/max-coinstruct/30min?back=1&month=2025-11'
+    )
+    if (!href) return
+    const rawSize = window.prompt('Size — sm / md / lg:', 'md')
+    const size = ['sm', 'md', 'lg'].includes(rawSize || '') ? (rawSize as string) : 'md'
+    editor.chain().focus().insertContent({ type: 'ctaButton', attrs: { text, href, size } }).run()
   }, [editor])
 
   if (!editor) {
@@ -224,6 +240,12 @@ export default function Editor({ content, onChange }: EditorProps) {
           onClick={() => editor.chain().focus().setHorizontalRule().run()}
           title="Horizontal rule"
         >─ HR</Btn>
+        <Sep />
+
+        {/* CTA Button */}
+        <Btn onClick={handleCta} title="Insert CTA button (text, URL, size)">
+          ⬛ CTA
+        </Btn>
       </div>
 
       {/* Hidden file input */}
