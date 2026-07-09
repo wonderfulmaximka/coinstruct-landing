@@ -1,4 +1,15 @@
-export default function Home() {
+import { supabase } from '@/lib/supabase'
+
+export const revalidate = 300
+
+export default async function Home() {
+  const { data: articles } = await supabase
+    .from('articles')
+    .select('slug, title, subtitle, excerpt, thumbnail_url, published_at, category')
+    .eq('status', 'published')
+    .order('published_at', { ascending: false })
+    .limit(3)
+
   return (
     <>
       {/* ================== NAV ================== */}
@@ -11,6 +22,7 @@ export default function Home() {
             <a href="#expertise">Expertise</a>
             <a href="#serve">Who we serve</a>
             <a href="#approach">How we work</a>
+            <a href="/research">Research</a>
             <a href="/blog">Blog</a>
           </div>
           <div className="spacer"></div>
@@ -33,12 +45,11 @@ export default function Home() {
         <div className="container">
           <div className="hero-stack">
             <div className="hero-copy">
-              <div className="eyebrow">Blockchain Advisory and Implementation</div>
               <h1 className="display-1">
-                Helping financial firms<br />adopt <span className="accent">blockchain</span>
+                Helping financial firms<br />adopt <span className="accent">tokenization</span>
               </h1>
               <p className="lead">
-                We design and execute digital asset strategies for banks, brokers, and fintechs, backed by our own intelligence platform that tracks how firms globally adopt blockchain.
+                Coinstruct is a tokenization advisory firm that helps financial institutions launch tokenization initiatives.
               </p>
               <div className="cta-row">
                 <a
@@ -52,8 +63,8 @@ export default function Home() {
                     <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </a>
-                <a href="#expertise" className="btn btn-secondary">
-                  Explore our work
+                <a href="https://coinstruct.net/" target="_blank" rel="noopener" className="btn btn-secondary">
+                  Access platform
                   <svg className="arr" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                     <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
@@ -164,6 +175,106 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ================== OUR SERVICES ================== */}
+      <section id="services">
+        <div className="container">
+          <div className="section-head">
+            <div className="left">
+              <div className="eyebrow">Our services</div>
+              <h2 className="display-2" style={{ margin: '20px 0 0' }}>Advisory and Execution for Institutional Tokenization</h2>
+            </div>
+            <div className="right">
+              <p className="lead">We support tokenization programs with expert guidance across regulation, provider evaluation, operating model design, and structured execution planning.</p>
+              <a
+                href="https://calendly.com/max-coinstruct/30min?back=1&month=2025-11"
+                target="_blank"
+                rel="noopener"
+                className="btn btn-primary"
+                style={{ marginTop: '28px' }}
+              >
+                Talk to Expert
+                <svg className="arr" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <div className="services-grid">
+            {/* Tokenization Strategy */}
+            <div className="service-card">
+              <div className="svc-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 3v18h18"/><path d="M7 16l4-5 4 3 4-6"/>
+                </svg>
+              </div>
+              <div className="svc-title">Tokenization Strategy &amp; Advisory</div>
+              <div className="svc-desc">Building a complete tokenization strategy: what assets to tokenize, model type, infrastructure selection, GTM plan, tech stack selection and asset economic modelling.</div>
+            </div>
+
+            {/* Workshops */}
+            <div className="service-card">
+              <div className="svc-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+                </svg>
+              </div>
+              <div className="svc-title">Workshops and Training Programs</div>
+              <div className="svc-desc">Custom sessions to educate company executives on the blockchain market landscape, successful cases, compliance and present the options available for tokenization.</div>
+            </div>
+
+            {/* Token Economy */}
+            <div className="service-card">
+              <div className="svc-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="3"/><circle cx="4" cy="6" r="2"/><circle cx="20" cy="6" r="2"/><circle cx="4" cy="18" r="2"/><circle cx="20" cy="18" r="2"/>
+                  <path d="M6 7l4 3M14 9l4-3M6 17l4-3M14 15l4 3"/>
+                </svg>
+              </div>
+              <div className="svc-title">Token Economy Modeling</div>
+              <div className="svc-desc">We design the token economy: supply-side, mechanics, internal parameters and create a technical specification ready for execution in smart-contracts.</div>
+            </div>
+
+            {/* Compliance */}
+            <div className="service-card">
+              <div className="svc-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.35C17.25 22.15 21 17.25 21 12V7L12 2z"/>
+                  <polyline points="9 12 11 14 15 10"/>
+                </svg>
+              </div>
+              <div className="svc-title">Compliance Strategy</div>
+              <div className="svc-desc">Documentation, application preparation, AML/CFT policies, custody policies, and governance frameworks: built to avoid delays from incomplete submissions.</div>
+            </div>
+
+            {/* Technical */}
+            <div className="service-card">
+              <div className="svc-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="16 18 22 12 16 6"/>
+                  <polyline points="8 6 2 12 8 18"/>
+                </svg>
+              </div>
+              <div className="svc-title">Technical Build-Up</div>
+              <div className="svc-desc">Smart-contract development, platform integration into DigiShares, InvestaX and similar, token deployment and all tech-related cases.</div>
+            </div>
+
+            {/* GTM */}
+            <div className="service-card">
+              <div className="svc-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="2" y1="12" x2="22" y2="12"/>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+              </div>
+              <div className="svc-title">Go-To-Market Support</div>
+              <div className="svc-desc">Managing partnerships with leading blockchain &amp; DeFi ecosystems, arranging conversations with exchanges and trading vendors for the asset launch &amp; listings.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ================== WHO WE SERVE ================== */}
       <section id="serve" className="cases-bg">
         <div className="container">
@@ -247,6 +358,57 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ================== OUR INSIGHTS ================== */}
+      {articles && articles.length > 0 && (
+        <section id="insights">
+          <div className="container">
+            <div className="section-head">
+              <div className="left">
+                <h2 className="display-2">Latest from our blog</h2>
+              </div>
+              <div className="right" style={{ display: 'flex', alignItems: 'flex-end' }}>
+                <a href="/blog" className="btn btn-secondary">
+                  View all articles
+                  <svg className="arr" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                    <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            <div className="insights-grid">
+              {articles.map((article) => (
+                <a key={article.slug} href={`/blog/${article.slug}`} className="insight-card">
+                  {article.thumbnail_url && (
+                    <div className="insight-thumb thumb-wrap">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={article.thumbnail_url} alt={article.title} />
+                      {article.category && (
+                        <span className="thumb-badge">{article.category}</span>
+                      )}
+                    </div>
+                  )}
+                  <div className="insight-body">
+                    {article.published_at && (
+                      <div className="insight-date">
+                        {new Date(article.published_at).toLocaleDateString('en-US', {
+                          year: 'numeric', month: 'long', day: 'numeric',
+                        })}
+                      </div>
+                    )}
+                    <div className="insight-title">{article.title}</div>
+                    {(article.excerpt || article.subtitle) && (
+                      <div className="insight-excerpt">{article.excerpt || article.subtitle}</div>
+                    )}
+                    <div className="insight-read">Read article →</div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ================== FOOTER CTA ================== */}
       <section id="contact" className="footer-cta">

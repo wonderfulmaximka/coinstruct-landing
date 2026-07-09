@@ -35,6 +35,7 @@ export default function EditArticlePage() {
   const [excerpt, setExcerpt] = useState('')
   const [metaDescription, setMetaDescription] = useState('')
   const [ogImageUrl, setOgImageUrl] = useState('')
+  const [category, setCategory] = useState('')
 
   // Action states
   const [saving, setSaving] = useState(false)
@@ -63,6 +64,7 @@ export default function EditArticlePage() {
         setExcerpt(data.excerpt || '')
         setMetaDescription(data.meta_description || '')
         setOgImageUrl(data.og_image_url || '')
+        setCategory((data as any).category || '')
         setContentReady(true)
       } catch {
         setFetchError('Failed to load article')
@@ -120,6 +122,7 @@ export default function EditArticlePage() {
           meta_description: metaDescription.trim() || null,
           og_image_url: ogImageUrl.trim() || null,
           schema_markup: null,
+          category: category || null,
           status,
         }),
       })
@@ -362,6 +365,21 @@ export default function EditArticlePage() {
               />
               {thumbnailUploading ? 'Uploading…' : '↑ Upload image'}
             </label>
+          </div>
+
+          {/* Category */}
+          <div className="bg-white rounded-xl border border-gray-200 p-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none"
+            >
+              <option value="">No category</option>
+              <option value="Industry News">Industry News</option>
+              <option value="Research">Research</option>
+              <option value="Podcast">Podcast</option>
+            </select>
           </div>
 
           {/* Excerpt */}

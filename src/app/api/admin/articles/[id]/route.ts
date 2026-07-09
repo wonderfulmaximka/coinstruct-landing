@@ -69,7 +69,7 @@ export async function PUT(
     const body = await request.json()
     const {
       title, slug, subtitle, content, excerpt,
-      thumbnail_url, meta_description, og_image_url, schema_markup, status,
+      thumbnail_url, meta_description, og_image_url, schema_markup, status, category,
     } = body
 
     if (!title || !slug) {
@@ -93,6 +93,7 @@ export async function PUT(
       meta_description: meta_description || null,
       og_image_url: og_image_url || null,
       schema_markup: schema_markup || null,
+      category: category || null,
       status: status || 'draft',
       updated_at: new Date().toISOString(),
     }

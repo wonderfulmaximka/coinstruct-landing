@@ -6,6 +6,7 @@ export type Article = {
   content: any // TipTap JSON
   excerpt: string | null
   thumbnail_url: string | null
+  category: string | null
   meta_description: string | null
   og_image_url: string | null
   schema_markup: any | null

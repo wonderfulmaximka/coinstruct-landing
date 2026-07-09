@@ -53,6 +53,7 @@ export default function BlogPage() {
             <a href="/#expertise">Expertise</a>
             <a href="/#serve">Who we serve</a>
             <a href="/#approach">How we work</a>
+            <a href="/research">Research</a>
             <a href="/blog">Blog</a>
           </div>
           <div className="spacer" />
@@ -117,12 +118,15 @@ export default function BlogPage() {
                 >
                   {/* Thumbnail */}
                   {article.thumbnail_url && (
-                    <div className="relative aspect-video overflow-hidden bg-gray-200">
+                    <div className="thumb-wrap relative aspect-video overflow-hidden bg-gray-200">
                       <img
                         src={article.thumbnail_url}
                         alt={article.title}
                         className="h-full w-full object-cover transition group-hover:scale-105"
                       />
+                      {article.category && (
+                        <span className="thumb-badge">{article.category}</span>
+                      )}
                     </div>
                   )}
 
