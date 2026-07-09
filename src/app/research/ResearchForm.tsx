@@ -137,12 +137,22 @@ export default function ResearchForm() {
 
       <style>{`
         @media (max-width: 768px) {
-          .rform-section { padding: 64px 0 !important; }
+          .rform-section { padding: 56px 0 0 !important; }
           .research-form-grid {
             grid-template-columns: 1fr !important;
-            gap: 32px !important;
+            gap: 40px !important;
           }
-          .rform-image { max-width: 220px !important; }
+          .rform-image-wrap {
+            width: 100vw !important;
+            margin-left: calc(50% - 50vw) !important;
+            margin-right: calc(50% - 50vw) !important;
+            background: #fff;
+            padding: 32px 24px 0 !important;
+          }
+          .rform-image {
+            max-width: 380px !important;
+            border-radius: 0 !important;
+          }
         }
       `}</style>
     </section>

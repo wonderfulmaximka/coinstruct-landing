@@ -134,7 +134,8 @@ export default function ResearchPage() {
           .rhero-inner {
             position: relative;
             z-index: 3;
-            padding: 150px 0 130px;
+            padding-top: 150px;
+            padding-bottom: 130px;
           }
           .rhero-title { color: #fff; }
           .rhero-sub { color: rgba(255,255,255,0.82); }
@@ -229,10 +230,10 @@ export default function ResearchPage() {
           }
           @media (max-width: 820px) {
             .rhero-nodes { display: none; }
-            .rhero-inner { padding: 100px 0 64px; }
+            .rhero-inner { padding-top: 100px; padding-bottom: 64px; }
           }
           @media (max-width: 480px) {
-            .rhero-inner { padding: 84px 0 48px; }
+            .rhero-inner { padding-top: 84px; padding-bottom: 48px; }
             .rhero-sub { margin-bottom: 28px !important; }
           }
         `}</style>
