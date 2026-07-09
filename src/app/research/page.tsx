@@ -186,12 +186,18 @@ export default function ResearchPage() {
             max-width: 460px;
           }
           @media (max-width: 720px) {
-            .rhero-founder { gap: 20px; }
+            .rhero-founder {
+              gap: 20px;
+              margin-top: 36px;
+              flex-direction: column;
+              align-items: flex-start;
+            }
             .rhero-quote {
               border-left: none;
               padding-left: 0;
               border-top: 2px solid rgba(255,255,255,0.2);
               padding-top: 16px;
+              max-width: 100%;
             }
           }
           .topo-node {
@@ -223,7 +229,11 @@ export default function ResearchPage() {
           }
           @media (max-width: 820px) {
             .rhero-nodes { display: none; }
-            .rhero-inner { padding: 120px 0 90px; }
+            .rhero-inner { padding: 100px 0 64px; }
+          }
+          @media (max-width: 480px) {
+            .rhero-inner { padding: 84px 0 48px; }
+            .rhero-sub { margin-bottom: 28px !important; }
           }
         `}</style>
       </section>

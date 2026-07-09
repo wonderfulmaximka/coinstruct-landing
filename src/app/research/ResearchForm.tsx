@@ -35,7 +35,7 @@ export default function ResearchForm() {
   }
 
   return (
-    <section id="get-report" style={{ padding: '100px 0', background: 'var(--surface)' }}>
+    <section id="get-report" className="rform-section" style={{ padding: '100px 0', background: 'var(--surface)' }}>
       <div className="container">
         <div style={{
           display: 'grid',
@@ -124,10 +124,11 @@ export default function ResearchForm() {
           </div>
 
           {/* Right — image */}
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div className="rform-image-wrap" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <img
               src="/assets/stacked_reports_1-report.png"
               alt="Tokenization Playbook for Banks 2026 — stacked report"
+              className="rform-image"
               style={{ width: '100%', maxWidth: '420px', borderRadius: '12px', display: 'block' }}
             />
           </div>
@@ -136,13 +137,12 @@ export default function ResearchForm() {
 
       <style>{`
         @media (max-width: 768px) {
+          .rform-section { padding: 64px 0 !important; }
           .research-form-grid {
             grid-template-columns: 1fr !important;
-            gap: 48px !important;
+            gap: 32px !important;
           }
-          .research-form-grid > div:last-child {
-            order: -1;
-          }
+          .rform-image { max-width: 220px !important; }
         }
       `}</style>
     </section>
