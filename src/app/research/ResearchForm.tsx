@@ -19,7 +19,7 @@ export default function ResearchForm() {
       const res = await fetch('/api/research/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, tokenization_planning: tokenization }),
+        body: JSON.stringify({ name, email, tokenization_planning: tokenization, source: 1 }),
       })
       const data = await res.json()
       if (!res.ok) {

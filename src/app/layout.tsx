@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
+import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,6 +16,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Google Analytics */}
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-DLHGY1JFQX" strategy="afterInteractive" />
+        <Script id="gtag-init" strategy="afterInteractive">{`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-DLHGY1JFQX');
+        `}</Script>
         {/* Favicons */}
         <link rel="icon" href="/assets/favicon/favicon.ico" sizes="any" />
         <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png" />

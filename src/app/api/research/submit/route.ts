@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { name, email, tokenization_planning } = body
+    const { name, email, tokenization_planning, source } = body
 
     if (!name?.trim() || !email?.trim()) {
       return NextResponse.json({ error: 'Name and email are required.' }, { status: 400 })
@@ -24,6 +24,7 @@ export async function POST(request: NextRequest) {
       name: name.trim(),
       email: email.trim().toLowerCase(),
       tokenization_planning: tokenization_planning || null,
+      source: source ?? null,
     })
 
     if (error) {

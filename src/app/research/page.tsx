@@ -269,41 +269,6 @@ export default function ResearchPage() {
         </div>
       </section>
 
-      {/* ── Strategy Matrix ─────────────────────── */}
-      <section style={{ background: 'var(--surface)' }}>
-        <div className="container">
-          <span className="eyebrow">Strategy Matrix</span>
-          <h2 className="display-3" style={{ marginTop: '16px', marginBottom: '16px', maxWidth: '640px' }}>
-            Bank Tokenization Strategy Matrix
-          </h2>
-          <p className="lead" style={{ maxWidth: '680px', marginBottom: '48px', fontSize: '16px' }}>
-            Each bank archetype faces a different risk/reward calculation. The matrix below maps the four archetypes to their optimal posture, first tokenization plays, and a concrete 12-month milestone.
-          </p>
-
-          <div style={{ overflowX: 'auto' }}>
-            <table style={tableStyle}>
-              <thead>
-                <tr>
-                  {['Bank Archetype', 'Posture', 'First Tokenization Plays', 'First 12 Months'].map(h => (
-                    <th key={h} style={thStyle}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {matrix.map((row, i) => (
-                  <tr key={i} style={{ background: i % 2 === 0 ? 'white' : 'var(--surface)' }}>
-                    <td style={{ ...tdStyle, fontWeight: 600, color: 'var(--ink)' }}>{row.archetype}</td>
-                    <td style={tdStyle}>{row.posture}</td>
-                    <td style={tdStyle}>{row.plays}</td>
-                    <td style={tdStyle}>{row.months}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
       {/* ── Form (client component) ─────────────── */}
       <ResearchForm />
 
@@ -344,65 +309,3 @@ const insights = [
   },
 ]
 
-const matrix = [
-  {
-    archetype: 'Tier-1 Global Bank',
-    posture: 'Lead & differentiate',
-    plays: 'Tokenized deposits; securities settlement; on-chain repo',
-    months: 'Live pilot with 3 institutional clients; internal treasury settlement migrated',
-  },
-  {
-    archetype: 'Regional / Mid-Market Bank',
-    posture: 'Fast follow',
-    plays: 'Tokenized trade finance; structured notes issuance',
-    months: 'PoC → MVP on one product line; regulatory pre-approval secured',
-  },
-  {
-    archetype: 'Private Bank / Wealth Manager',
-    posture: 'Client-led expansion',
-    plays: 'Tokenized alternatives access; fractional real-asset portfolios',
-    months: 'First tokenized product offered to UHNW clients; custody partner selected',
-  },
-  {
-    archetype: 'Islamic / Participation Bank',
-    posture: 'Shariah-native build',
-    plays: 'Sukuk tokenization; murabaha on-chain settlement',
-    months: 'Shariah board endorsement; first sukuk token issuance completed',
-  },
-  {
-    archetype: 'Challenger / Neo Bank',
-    posture: 'Integrate & distribute',
-    plays: 'Stablecoin rails; embedded tokenized yield products',
-    months: 'API-first tokenization layer live; first B2B distribution partner signed',
-  },
-]
-
-/* ── Table styles ─────────────────────────────────────── */
-
-const tableStyle: React.CSSProperties = {
-  width: '100%',
-  borderCollapse: 'collapse',
-  fontSize: '14px',
-  borderRadius: '12px',
-  overflow: 'hidden',
-  border: '1px solid var(--line)',
-}
-
-const thStyle: React.CSSProperties = {
-  textAlign: 'left',
-  padding: '14px 20px',
-  background: 'var(--ink)',
-  color: 'white',
-  fontWeight: 600,
-  fontSize: '13px',
-  letterSpacing: '-0.01em',
-  whiteSpace: 'nowrap',
-}
-
-const tdStyle: React.CSSProperties = {
-  padding: '16px 20px',
-  color: 'var(--ink-2)',
-  lineHeight: 1.5,
-  borderBottom: '1px solid var(--line)',
-  verticalAlign: 'top',
-}
