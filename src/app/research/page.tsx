@@ -22,6 +22,7 @@ export default function ResearchPage() {
             <a href="/#approach">How we work</a>
             <a href="/research" aria-current="page">Research</a>
             <a href="/blog">Blog</a>
+            <a href="/tokenized-deposits">Deposits Tracker</a>
           </div>
           <div className="spacer" />
           <a

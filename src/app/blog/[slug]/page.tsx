@@ -93,6 +93,7 @@ export default function ArticlePage() {
             <a href="/#serve">Who we serve</a>
             <a href="/#approach">How we work</a>
             <a href="/blog">Blog</a>
+            <a href="/tokenized-deposits">Deposits Tracker</a>
           </div>
           <div className="spacer" />
           <a

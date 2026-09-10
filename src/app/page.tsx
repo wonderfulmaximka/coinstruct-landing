@@ -24,6 +24,7 @@ export default async function Home() {
             <a href="#approach">How we work</a>
             <a href="/research">Research</a>
             <a href="/blog">Blog</a>
+            <a href="/tokenized-deposits">Deposits Tracker</a>
           </div>
           <div className="spacer"></div>
           <a

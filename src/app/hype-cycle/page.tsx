@@ -67,6 +67,7 @@ export default function HypeCyclePage() {
             <a href="/research">Research</a>
             <a href="/hype-cycle" aria-current="page">Hype Cycle</a>
             <a href="/blog">Blog</a>
+            <a href="/tokenized-deposits">Deposits Tracker</a>
           </div>
           <div className="spacer" />
           <a
