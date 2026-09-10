@@ -1,18 +1,19 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  /* config options here */
+const researchRedirects = [
+  {
+    slug: "1",
+    utm_campaign: "research_post1",
+  },
+];
 
-  // Attribution slugs: /research/<slug> serves the /research page unchanged,
-  // but the URL stays distinct so Vercel Web Analytics logs it as its own path.
-  // Use one slug per LinkedIn post (1, 2, 3...) to attribute traffic per post.
-  async rewrites() {
-    return [
-      {
-        source: "/research/:slug",
-        destination: "/research",
-      },
-    ];
+const nextConfig: NextConfig = {
+  async redirects() {
+    return researchRedirects.map(({ slug, utm_campaign }) => ({
+      source: `/research/${slug}`,
+      destination: `/research?utm_source=linkedin&utm_medium=social&utm_campaign=${utm_campaign}`,
+      permanent: false,
+    }));
   },
 };
 
